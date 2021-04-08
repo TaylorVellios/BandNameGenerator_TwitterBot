@@ -1,7 +1,3 @@
-ATM
-CD
-SUV
-TV
 aardvark
 abacus
 abbey
@@ -773,6 +769,7 @@ building
 bulb
 bulk
 bull
+bullshit
 bull-fighter
 bulldozer
 bullet
@@ -1191,6 +1188,7 @@ cob
 cobbler
 cobweb
 cock
+cocksucker
 cockpit
 cockroach
 cocktail
@@ -1567,6 +1565,7 @@ cultivar
 cultivator
 culture
 culvert
+cunt
 cum
 cum
 cummerbund
@@ -1602,7 +1601,6 @@ cutting
 cyclamen
 cycle
 cyclone
-cyclooxygenase
 cygnet
 cylinder
 cymbal
@@ -2333,7 +2331,6 @@ few
 fiber
 fiberglass
 fibre
-fibroblast
 fibrosis
 ficlet
 fiction
