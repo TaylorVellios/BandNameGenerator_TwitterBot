@@ -168,7 +168,7 @@ def make_name_1():
             current_v = verb[:-1] + 'ing'
         elif verb[-2] != verb[-1] and verb[-2] in 'aeiouAEIOU' and verb[-3] in 'aeiouAEIOU':
             current_v = verb + 'ing'
-        elif verb[-2:] not in ['st','ct','nd','ng','rt','rd','lt','sh'] and verb[-2] != verb[-1]:
+        elif verb[-2:] not in ['st','ct','nd','ng','rt','rd','lt','sh','fy','ax'] and verb[-2] != verb[-1]:
             current_v = verb + verb[-1] + 'ing'
         else:
             current_v = verb + 'ing'
