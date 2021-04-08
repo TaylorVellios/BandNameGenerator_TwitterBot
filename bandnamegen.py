@@ -1,13 +1,8 @@
 # band name generator 2
+from os import name
 import random
-from datetime import date, datetime
-import tweepy
-import webbrowser
+import genre_lists as GL
 
-import sched, time
-s = sched.scheduler(time.time, time.sleep)
-
-from config import api_key, api_secret, bearer_token
 
 #pull_noun() returns a tuple - [0] for random any/ [1] for shorter in length
 def pull_noun():
@@ -79,7 +74,7 @@ def pull_art(adj,verb,short_verb,noun, short_noun):
     else:
         art3 = 'a'
 
-    return art0, art1, art2
+    return art0, art1, art2, art3
 
 #Prepositions - Returns a Capitalized Single Word
 def pull_prep():
@@ -88,6 +83,25 @@ def pull_prep():
     prep = random.choice(f)
     n.close()
     return prep.capitalize()
+
+
+#First Names, returns a name object and several alliterative options
+def make_solo_artist():
+    name_list = open('resources/first_names.txt')
+    n_list = open('resources/noun_list.txt')
+    name = random.choice([i.strip('\n') for i in name_list])
+    nouns = [i.strip('\n').capitalize() for i in n_list if len(i)<=7]
+    filtered = [i for i in nouns if i.startswith(name[0])]
+    name_list.close()
+    n_list.close()
+    return name, random.choice(filtered)
+
+def make_indie_aesthetic():
+    adj = pull_adj()[0].upper()
+    noun = pull_noun()[0].upper()
+    rm_adj = [i for i in adj if i not in 'AEIOU']
+    rm_noun = [i for i in noun if i not in 'AEIOU']
+    return (f"{''.join(rm_adj)} {''.join(rm_noun)}", f"{adj} {noun}" )
 
 #make_baseball_team returns an entire f-string
 def make_baseball_team():
@@ -136,15 +150,17 @@ def make_name_1():
     ad = adjectives[0] 
     short_adj = adjectives[1]
 
-    art = pull_art(ad,verb,short_verb,noun)
+    art = pull_art(ad,verb,short_verb,noun,short_noun)
     art_pre_adj = art[0]
     art_pre_verb = art[1]
     art_pre_noun = art[2]
     art_pre_short_noun = art[3]
 
-
+    
     prep = pull_prep()
     adverb = pull_adverb()
+
+    solo = make_solo_artist()
 
     current_v = ''                      #Controlling Tense With What pull_verb() outputs
     if not verb.endswith('ing'):
@@ -200,31 +216,16 @@ def make_name_1():
     rapper_pref = ['Yung', 'Lil', 'Big', 'Thicc', 'MC', 'Professor']
     rapper = random.choice(rapper_pref)
 
-    genre_hard = ['Metalcore Band', 'Metalcore BoyBand', 'Primus Cover Band', 'Prog Metal Solo Project', 'Christian Metal Band', 'Early 2000s Rap Metal Group',
-                    'Communist Labor Metal Band', 'Djent Band With Nice Haircuts', 'Stoner Metal', 'Skramz Band', 'Emotive Hardcore Band', 'Hardcore Band',
-                    'Band That Wants to be Hard but Doesnt Tune Lower Than Drop D', 'classic Metal Band That Listens to Joe Rogan More Than They Practice',
-                    'Band That Refuses to Take Off Their Oakley Sunglasses Inside', 'Costumed Gimmick Band']
-
-    genre_rap = ['Soundcloud Rapper', 'Emo Rapper', 'Alias for Someone that Listened to GBC Once', 'UK Grime Alias', 'Political Hip Hop Alias', 'West Coast Rapper',
-                    'Jewish Hip Hop Alias', 'Mumble Rapper', 'East Coast Rapper', 'Youtube Comments Beggar Rapper', 'Bounce DJ']
-
-    genre_mid = ['Indie Band', 'Alternative Rock Band', 'Emo Band', 'Wedding Cover-Band Name', 'Indie Band Where Everyone Wears a Flat Brimmed Hat', 'Shoegaze Band', 
-                    'Post Punk Band', 'New Wave Revival Band', 'Slacker Rock Band', 'Wishes-They-Were-Nirvana 2.0 Band', "Band That Doesn't Need The Keyboard Player",
-                    'Local Band That Invites Everyone in their FB Friends List to Show Events']
-
-    genre_soft = ['Guy That Plays Ukelele', 'Soft Rock Band With Excessive Pentatonic Riffage', 'Dad Rock Band', 'Blues Dad Band', 
-                    'Radio-Rock Band That Tours With 3 Guitar Players and They All Play Strats', 'A Pop Band That INSISTS They are a Rock Band', 
-                    'High School Talent Show Performance', 'Bon Jovi Cover Band', 'Band That Plays Way too Soft to be Wearing That Leather Vest',
-                    'Aging Rock Band In Divorce Debt']
-
-    hard = random.choice(genre_hard)
-    rap = random.choice(genre_rap)
-    mid = random.choice(genre_mid)
-    soft = random.choice(genre_soft)
+    hard = random.choice(GL.genre_hard)
+    rap = random.choice(GL.genre_rap)
+    mid = random.choice(GL.genre_mid)
+    soft = random.choice(GL.genre_soft)
 
     metalcore1 = (f'{verb} the {noun}', hard)
     metalcore2 = (f'{verb} {prep} the {noun}', hard)
     metalcore3 = (f'{prep} {art_pre_adj} {ad} {noun}', hard)
+
+    vowelless_band = make_indie_aesthetic()
 
     indie1 = (f'The {plural_n}', mid)
     indie2 = (f'{art_pre_verb.capitalize()} {past_verb} {singular_noun}', mid)
@@ -233,12 +234,15 @@ def make_name_1():
     indie5 = (f'{noun} {short_plural_n}', mid)
     indie6 = (f'{ad} {noun}', mid)
     indie7 = (f'{current_v} {adverb}', mid)
+    indie8 = (f"{vowelless_band[0]} ({vowelless_band[1]})",mid) 
 
     skramz1 =(short_noun+short_verb.lower(), hard)
     skramz2 = (f'{prep} {art_pre_noun} {noun}', hard)
 
     rapper1 = (f'{rapper} {short_noun}', rap)
     rapper2 = (f'{short_noun}mane', rap)
+    rapper3 = (f'{rapper} {solo[0]}',rap)
+    rapper4 = (f'{solo[0]} {solo[1]}',random.choice([rap,soft]))
 
     emo1 = (f'{random.choice(family)} {plural_n}', 'Midwest Emo Band')
     emo2 = (f'{short_adj} {plural_n}', mid)
@@ -252,63 +256,13 @@ def make_name_1():
     sports = (make_baseball_team(), 'Sports Team? idk..')
 
     return [metalcore1,metalcore2,metalcore3,
-    indie1,indie2,indie3,indie4,indie5,indie6,indie7,
+    indie1,indie2,indie3,indie4,indie5,indie6,indie7,indie8,
     skramz1,skramz2,
-    rapper1,rapper2,
+    rapper1,rapper2,rapper3,rapper4,
     emo1,emo2,pop_punk1,pop_punk2,
-    long_1,long_2,
-    sports]
+    long_1,long_2,]
 
 
-#Twitter Stuff
-twitter_callback = 'oob'
-auth = tweepy.OAuthHandler(api_key, api_secret, twitter_callback)
-redirect_url = auth.get_authorization_url()
 
-login = True
-while login:
-    webbrowser.open(redirect_url)
-    print()
-    user_pin = input('Enter the Pin from the Twitter Auth Pop-Up: ')
-    print()
-    try:
-        auth.get_access_token(user_pin)
-        print()
-        print('Tokens Confirmed')
-        login = False
-    except:
-        print('Pin Number INVALID. Please Try Again\n')
-
-api = tweepy.API(auth)
-me = api.me()
-print(f'Confirming Tokens for user: {me.screen_name}\n'
-        f'Access Token: {auth.access_token}\n'
-        f'Access Token Secret: {auth.access_token}\n')
-
-divider = '--------------------------------------------------------------'
-print(divider)
-
-
-def get_name_and_tweet():
-    right_now = datetime.now()
-    output = random.choice(make_name_1())
-
-    band_name = output[0]
-    genre = output[1]
-
-    tweet_string = ''
-    if genre[0].upper() in 'AEIOU':
-        tweet_string = f'For an {genre}:\n{band_name}'
-    else:
-        tweet_string = f'For a {genre}:\n{band_name}'
-
-    print(f'Tweeting at {right_now}: \n{tweet_string}')
-    api.update_status(tweet_string)
-    print(divider)
-    s.enter(7400,1, get_name_and_tweet)
-
-
-s.enter(1,1, get_name_and_tweet)
-s.run()
-
-s.cancel()
+for i in make_name_1():
+    print(i)
