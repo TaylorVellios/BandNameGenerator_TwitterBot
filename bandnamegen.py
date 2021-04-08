@@ -242,7 +242,7 @@ def make_name_1():
     rapper1 = (f'{rapper} {short_noun}', rap)
     rapper2 = (f'{short_noun}mane', rap)
     rapper3 = (f'{rapper} {solo[0]}',rap)
-    rapper4 = (f'{solo[0]} {solo[1]}',random.choice([rap,soft]))
+    rapper4 = (f'{solo[0]} {solo[1]}',f"{solo[0]}'s Solo Project")
 
     emo1 = (f'{random.choice(family)} {plural_n}', 'Midwest Emo Band')
     emo2 = (f'{short_adj} {plural_n}', mid)
